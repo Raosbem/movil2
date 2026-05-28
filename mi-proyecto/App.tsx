@@ -2,9 +2,9 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Text } from 'react-native';
 
-import HomeScreen from './screens/HomeScreen';
+import SkillsScreen from './screens/SkillsScreen';
 import PerfilScreen from './screens/PerfilScreen';
-import ConsideracionScreen from './screens/ConsideracionScreen';
+import ProjectScreen from './screens/ProjectScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -32,24 +32,24 @@ export default function App() {
         }}
       >
         <Tab.Screen
-          name="Inicio"
-          component={HomeScreen}
-          options={{
-            tabBarIcon: () => <Text style={{ fontSize: 20 }}></Text>,
-          }}
-        />
-        <Tab.Screen
           name="Perfil"
           component={PerfilScreen}
           options={{
-            tabBarIcon: () => <Text style={{ fontSize: 20 }}></Text>,
+            tabBarIcon: () => <Text style={{ fontSize: 18 }}>👤</Text>,
           }}
         />
         <Tab.Screen
-          name="Consideración"
-          component={ConsideracionScreen}
+          name="Habilidades"
+          component={SkillsScreen}
           options={{
-            tabBarIcon: () => <Text style={{ fontSize: 20 }}></Text>,
+            tabBarIcon: () => <Text style={{ fontSize: 18 }}>💡</Text>,
+          }}
+        />
+        <Tab.Screen
+          name="Proyecto"
+          component={ProjectScreen}
+          options={{
+            tabBarIcon: () => <Text style={{ fontSize: 18 }}>📁</Text>,
           }}
         />
       </Tab.Navigator>
