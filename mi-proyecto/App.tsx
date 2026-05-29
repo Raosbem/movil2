@@ -35,21 +35,21 @@ export default function App() {
           name="Perfil"
           component={PerfilScreen}
           options={{
-            tabBarIcon: () => <Text style={{ fontSize: 18 }}>👤</Text>,
+            tabBarIcon: () => <Text style={{ fontSize: 18 }}></Text>,
           }}
         />
         <Tab.Screen
           name="Habilidades"
           component={SkillsScreen}
           options={{
-            tabBarIcon: () => <Text style={{ fontSize: 18 }}>💡</Text>,
+            tabBarIcon: () => <Text style={{ fontSize: 18 }}></Text>,
           }}
         />
         <Tab.Screen
           name="Proyecto"
           component={ProjectScreen}
           options={{
-            tabBarIcon: () => <Text style={{ fontSize: 18 }}>📁</Text>,
+            tabBarIcon: () => <Text style={{ fontSize: 18 }}></Text>,
           }}
         />
       </Tab.Navigator>
