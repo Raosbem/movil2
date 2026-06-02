@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, FlatList } from 'react-native';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
 
 const habilidades: string[] = [
   'FL studio',
@@ -10,22 +10,19 @@ const habilidades: string[] = [
 
 export default function SkillsScreen() {
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.titulo}>Habilidades</Text>
       <Text style={styles.descripcion}>
         Estas son algunas de las habilidades que manejo:
       </Text>
-      <FlatList
-        data={habilidades}
-        keyExtractor={(item) => item}
-        contentContainerStyle={styles.lista}
-        renderItem={({ item }) => (
-          <View style={styles.chip}>
+      <View style={styles.lista}>
+        {habilidades.map((item) => (
+          <View key={item} style={styles.chip}>
             <Text style={styles.chipTexto}>{item}</Text>
           </View>
-        )}
-      />
-    </View>
+        ))}
+      </View>
+    </ScrollView>
   );
 }
 
