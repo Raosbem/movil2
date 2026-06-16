@@ -2,54 +2,27 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Text } from 'react-native';
 
-import SkillsScreen from './screens/SkillsScreen';
-import PerfilScreen from './screens/PerfilScreen';
-import ProjectScreen from './screens/ProjectScreen';
+import HomeScreen from './src/screens/HomeScreen';
+import PerfilScreen from './src/screens/PerfilScreen';
 
 const Tab = createBottomTabNavigator();
 
 export default function App() {
   return (
     <NavigationContainer>
-      <Tab.Navigator
-        screenOptions={{
-          tabBarActiveTintColor: '#3b82f6',
-          tabBarInactiveTintColor: '#999',
-          tabBarStyle: {
-            backgroundColor: '#fff',
-            borderTopWidth: 1,
-            borderTopColor: '#e5e5e5',
-            height: 60,
-            paddingBottom: 8,
-          },
-          headerStyle: {
-            backgroundColor: '#3b82f6',
-          },
-          headerTintColor: '#fff',
-          headerTitleStyle: {
-            fontWeight: 'bold',
-          },
-        }}
-      >
+      <Tab.Navigator>
+        <Tab.Screen
+          name="Inicio"
+          component={HomeScreen}
+          options={{
+            tabBarIcon: () => <Text>🏠</Text>,
+          }}
+        />
         <Tab.Screen
           name="Perfil"
           component={PerfilScreen}
           options={{
-            tabBarIcon: () => <Text style={{ fontSize: 18 }}></Text>,
-          }}
-        />
-        <Tab.Screen
-          name="Habilidades"
-          component={SkillsScreen}
-          options={{
-            tabBarIcon: () => <Text style={{ fontSize: 18 }}></Text>,
-          }}
-        />
-        <Tab.Screen
-          name="Proyecto"
-          component={ProjectScreen}
-          options={{
-            tabBarIcon: () => <Text style={{ fontSize: 18 }}></Text>,
+            tabBarIcon: () => <Text>👤</Text>,
           }}
         />
       </Tab.Navigator>
