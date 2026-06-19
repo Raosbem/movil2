@@ -21,6 +21,6 @@ export type Oferta = {
   id: number;
   productoId: number;
   monto: number;
-  comprador: string;
+  usuarioId: number;
   fecha: string;
 };

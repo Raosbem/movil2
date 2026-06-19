@@ -1,11 +1,9 @@
-import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity, Alert } from 'react-native';
-import { productos, artesanos } from '../services/artesaniaService';
+import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity, Alert, ActivityIndicator, Button } from 'react-native';
+import { useProductos } from '../hooks/useProductos';
 import { Producto } from '../types/index';
 
 export default function HomeScreen() {
-  const getArtesano = (artesanoId: number) => {
-    return artesanos.find(a => a.id === artesanoId);
-  };
+  const { productos, cargando, getArtesano, error, retry } = useProductos();
 
   const handleOfertar = (producto: Producto) => {
     const nuevaOferta = producto.precioActual + 100;
@@ -40,6 +38,24 @@ export default function HomeScreen() {
       </View>
     );
   };
+
+  if (cargando) {
+    return (
+      <View style={styles.centrado}>
+        <ActivityIndicator size="large" color="#3b82f6" />
+        <Text style={styles.cargandoTexto}>Cargando subastas...</Text>
+      </View>
+    );
+  }
+
+  if (error) {
+    return (
+      <View style={styles.centrado}>
+        <Text style={styles.cargandoTexto}>{error}</Text>
+        <Button title="Reintentar" onPress={retry} />
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
