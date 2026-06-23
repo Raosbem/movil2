@@ -3,8 +3,12 @@ import { useProductos } from '../hooks/useProductos';
 import { Producto } from '../types/index';
 
 export default function HomeScreen() {
+  // Desestructuramos el valor del custom hook useProductos
+  // Esto nos da acceso a productos, cargando, getArtesano y retry sin importar directamente del servicio
   const { productos, cargando, getArtesano, error, retry } = useProductos();
 
+  // Función para manejar cuando el usuario quiere hacer una oferta por un producto
+  // Muestra un diálogo de confirmación y simula el registro de la oferta
   const handleOfertar = (producto: Producto) => {
     const nuevaOferta = producto.precioActual + 100;
     Alert.alert(
@@ -17,6 +21,8 @@ export default function HomeScreen() {
     );
   };
 
+  // Función para renderizar cada producto en la lista
+  // Obtiene el artesano correspondiente usando el hook getArtesano
   const renderProducto = ({ item }: { item: Producto }) => {
     const artesano = getArtesano(item.artesanoId);
     return (
@@ -39,6 +45,8 @@ export default function HomeScreen() {
     );
   };
 
+  // Indicador de carga: Mientras cargando sea true, mostramos el spinner
+  // Esto proporciona feedback visual al usuario de que se están obteniendo datos
   if (cargando) {
     return (
       <View style={styles.centrado}>
@@ -48,6 +56,8 @@ export default function HomeScreen() {
     );
   }
 
+  // Pantalla de error: Si hay un error, mostramos el mensaje y un botón para reintentar
+  // El usuario puede hacer click en "Reintentar" para volver a intentar la carga
   if (error) {
     return (
       <View style={styles.centrado}>
@@ -57,6 +67,8 @@ export default function HomeScreen() {
     );
   }
 
+  // Pantalla principal: Muestra la lista de productos obtenidos del hook
+  // La FlatList renderiza cada producto usando la función renderProducto
   return (
     <View style={styles.container}>
       <FlatList
