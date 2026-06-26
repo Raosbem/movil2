@@ -3,7 +3,7 @@ import { Artesano, Producto } from '../types/index';
 
 const DB_NAME = 'artisan_auction.db';
 
-const artesanosSemilla: Artesano[] = [
+export const artesanosSemilla: Artesano[] = [
   {
     id: 1,
     nombre: 'María López',
@@ -27,7 +27,7 @@ const artesanosSemilla: Artesano[] = [
   },
 ];
 
-const productosSemilla: Omit<Producto, 'id'>[] = [
+export const productosSemilla: Omit<Producto, 'id'>[] = [
   {
     nombre: 'Jarrón Talavera Azul',
     descripcion: 'Jarrón hecho a mano con técnica tradicional de Talavera.',
