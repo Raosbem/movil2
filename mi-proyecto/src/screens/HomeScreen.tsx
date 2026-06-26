@@ -3,12 +3,17 @@ import { useProductos } from '../hooks/useProductos';
 import { Producto } from '../types/index';
 
 export default function HomeScreen() {
-  // Desestructuramos el valor del custom hook useProductos
-  // Esto nos da acceso a productos, cargando, getArtesano y retry sin importar directamente del servicio
-  const { productos, cargando, getArtesano, error, retry } = useProductos();
+  const {
+    productos,
+    cargando,
+    getArtesano,
+    error,
+    retry,
+    insertarProducto,
+    actualizarPrecioProducto,
+    eliminarProductoPorId,
+  } = useProductos();
 
-  // Función para manejar cuando el usuario quiere hacer una oferta por un producto
-  // Muestra un diálogo de confirmación y simula el registro de la oferta
   const handleOfertar = (producto: Producto) => {
     const nuevaOferta = producto.precioActual + 100;
     Alert.alert(
@@ -21,8 +26,33 @@ export default function HomeScreen() {
     );
   };
 
-  // Función para renderizar cada producto en la lista
-  // Obtiene el artesano correspondiente usando el hook getArtesano
+  const handleAgregarProducto = async () => {
+    await insertarProducto({
+      nombre: 'Lámpara Artesanal',
+      descripcion: 'Lámpara hecha a mano con materiales naturales.',
+      imagen: 'https://picsum.photos/id/210/300',
+      precioInicial: 700,
+      precioActual: 700,
+      artesanoId: 1,
+      fechaFin: '2026-08-01',
+    });
+  };
+
+  const handleActualizar = async (producto: Producto) => {
+    await actualizarPrecioProducto(producto.id, producto.precioActual + 100);
+  };
+
+  const handleEliminar = (producto: Producto) => {
+    Alert.alert(
+      'Eliminar producto',
+      `¿Deseas eliminar ${producto.nombre}?`,
+      [
+        { text: 'Cancelar', style: 'cancel' },
+        { text: 'Eliminar', style: 'destructive', onPress: () => eliminarProductoPorId(producto.id) },
+      ]
+    );
+  };
+
   const renderProducto = ({ item }: { item: Producto }) => {
     const artesano = getArtesano(item.artesanoId);
     return (
@@ -37,16 +67,19 @@ export default function HomeScreen() {
             <Text style={styles.precio}>${item.precioActual}</Text>
           </View>
           <Text style={styles.fecha}>Cierra: {item.fechaFin}</Text>
-          <TouchableOpacity style={styles.boton} onPress={() => handleOfertar(item)}>
-            <Text style={styles.botonTexto}>Hacer oferta +$100</Text>
-          </TouchableOpacity>
+          <View style={styles.actions}>
+            <TouchableOpacity style={styles.smallButton} onPress={() => handleActualizar(item)}>
+              <Text style={styles.smallButtonText}>Actualizar +$100</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={[styles.smallButton, styles.deleteButton]} onPress={() => handleEliminar(item)}>
+              <Text style={styles.smallButtonText}>Eliminar</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     );
   };
 
-  // Indicador de carga: Mientras cargando sea true, mostramos el spinner
-  // Esto proporciona feedback visual al usuario de que se están obteniendo datos
   if (cargando) {
     return (
       <View style={styles.centrado}>
@@ -56,8 +89,6 @@ export default function HomeScreen() {
     );
   }
 
-  // Pantalla de error: Si hay un error, mostramos el mensaje y un botón para reintentar
-  // El usuario puede hacer click en "Reintentar" para volver a intentar la carga
   if (error) {
     return (
       <View style={styles.centrado}>
@@ -67,10 +98,11 @@ export default function HomeScreen() {
     );
   }
 
-  // Pantalla principal: Muestra la lista de productos obtenidos del hook
-  // La FlatList renderiza cada producto usando la función renderProducto
   return (
     <View style={styles.container}>
+      <View style={styles.topAction}>
+        <Button title="Agregar producto demo" onPress={handleAgregarProducto} />
+      </View>
       <FlatList
         data={productos}
         keyExtractor={item => item.id.toString()}
@@ -85,6 +117,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f5f5f5',
+  },
+  topAction: {
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    backgroundColor: '#fff',
   },
   lista: {
     padding: 16,
@@ -135,6 +172,36 @@ const styles = StyleSheet.create({
   fecha: {
     fontSize: 12,
     color: '#aaa',
+  },
+  actions: {
+    flexDirection: 'row',
+    gap: 8,
+    marginTop: 12,
+  },
+  smallButton: {
+    flex: 1,
+    backgroundColor: '#3b82f6',
+    borderRadius: 8,
+    paddingVertical: 10,
+    alignItems: 'center',
+  },
+  deleteButton: {
+    backgroundColor: '#ef4444',
+  },
+  smallButtonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 13,
+  },
+  centrado: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  cargandoTexto: {
+    marginTop: 12,
+    fontSize: 14,
+    color: '#666',
   },
   boton: {
     backgroundColor: '#3b82f6',

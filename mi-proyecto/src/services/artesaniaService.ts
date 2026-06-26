@@ -1,58 +1,41 @@
+import { getDatabase, getAllAsync, runAsync } from '../database/db';
 import { Artesano, Producto } from '../types/index';
 
-export const artesanos: Artesano[] = [
-  {
-    id: 1,
-    nombre: 'María López',
-    especialidad: 'Cerámica Talavera',
-    imagen: 'https://picsum.photos/id/1011/200',
-    ubicacion: 'Puebla, México',
-  },
-  {
-    id: 2,
-    nombre: 'Juan Méndez',
-    especialidad: 'Textiles Otomí',
-    imagen: 'https://picsum.photos/id/1012/200',
-    ubicacion: 'Querétaro, México',
-  },
-  {
-    id: 3,
-    nombre: 'Rosa Hernández',
-    especialidad: 'Alebrijes',
-    imagen: 'https://picsum.photos/id/1013/200',
-    ubicacion: 'Oaxaca, México',
-  },
-];
+export async function obtenerArtesanos(): Promise<Artesano[]> {
+  const db = await getDatabase();
+  return getAllAsync<Artesano>(db, 'SELECT * FROM artesanos ORDER BY nombre');
+}
 
-export const productos: Producto[] = [
-  {
-    id: 1,
-    nombre: 'Jarrón Talavera Azul',
-    descripcion: 'Jarrón hecho a mano con técnica tradicional de Talavera.',
-    imagen: 'https://picsum.photos/id/200/300',
-    precioInicial: 500,
-    precioActual: 650,
-    artesanoId: 1,
-    fechaFin: '2026-07-01',
-  },
-  {
-    id: 2,
-    nombre: 'Mantel Bordado Otomí',
-    descripcion: 'Mantel con bordado a mano con motivos de la cultura Otomí.',
-    imagen: 'https://picsum.photos/id/201/300',
-    precioInicial: 800,
-    precioActual: 950,
-    artesanoId: 2,
-    fechaFin: '2026-07-05',
-  },
-  {
-    id: 3,
-    nombre: 'Alebrije Dragón',
-    descripcion: 'Figura de madera pintada a mano representando un dragón.',
-    imagen: 'https://picsum.photos/id/202/300',
-    precioInicial: 1200,
-    precioActual: 1200,
-    artesanoId: 3,
-    fechaFin: '2026-07-10',
-  },
-];
+export async function obtenerProductos(): Promise<Producto[]> {
+  const db = await getDatabase();
+  return getAllAsync<Producto>(db, 'SELECT * FROM productos ORDER BY id');
+}
+
+export async function agregarProducto(producto: Omit<Producto, 'id'>): Promise<number> {
+  const db = await getDatabase();
+  const resultado = await runAsync(
+    db,
+    'INSERT INTO productos (nombre, descripcion, imagen, precioInicial, precioActual, artesanoId, fechaFin) VALUES (?, ?, ?, ?, ?, ?, ?)',
+    [
+      producto.nombre,
+      producto.descripcion,
+      producto.imagen,
+      producto.precioInicial,
+      producto.precioActual,
+      producto.artesanoId,
+      producto.fechaFin,
+    ]
+  );
+
+  return (resultado as any).insertId ?? 0;
+}
+
+export async function actualizarProductoPrecio(id: number, precioActual: number): Promise<void> {
+  const db = await getDatabase();
+  await runAsync(db, 'UPDATE productos SET precioActual = ? WHERE id = ?', [precioActual, id]);
+}
+
+export async function eliminarProducto(id: number): Promise<void> {
+  const db = await getDatabase();
+  await runAsync(db, 'DELETE FROM productos WHERE id = ?', [id]);
+}
