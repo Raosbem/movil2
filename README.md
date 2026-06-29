@@ -284,3 +284,4 @@ export default function App() {
 
 React Native es una excelente opción para el desarrollo móvil multiplataforma gracias a su rapidez, reutilización de código y gran ecosistema de herramientas y librerías.
 
+Como tal no enfrenté muchos problemas, sin embargo fue interesante crear este proeycto
